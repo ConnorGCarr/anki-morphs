@@ -1,6 +1,12 @@
 from __future__ import annotations
 
-from aqt.qt import QCheckBox, QDialog, QSpinBox, Qt  # pylint:disable=no-name-in-module
+from aqt.qt import (  # pylint:disable=no-name-in-module
+    QCheckBox,
+    QDialog,
+    QDoubleSpinBox,
+    QSpinBox,
+    Qt,
+)
 
 from ..ankimorphs_config import AnkiMorphsConfig, RawConfigKeys
 from ..ui.settings_dialog_ui import Ui_SettingsDialog
@@ -26,7 +32,7 @@ class CardHandlingTab(SettingsTab):
             RawConfigKeys.RECALC_MOVE_KNOWN_NEW_CARDS_TO_THE_END: self.ui.recalcMoveKnownNewCardsToTheEndCheckBox,
         }
 
-        self._raw_config_key_to_spin_box: dict[str, QSpinBox] = {
+        self._raw_config_key_to_spin_box: dict[str, QSpinBox | QDoubleSpinBox] = {
             RawConfigKeys.RECALC_DUE_OFFSET: self.ui.dueOffsetSpinBox,
             RawConfigKeys.RECALC_NUMBER_OF_MORPHS_TO_OFFSET: self.ui.offsetFirstMorphsSpinBox,
         }

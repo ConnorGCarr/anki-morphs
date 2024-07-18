@@ -150,6 +150,9 @@ P_{\text{average}}^{\text{learning}} &= \frac{P_{\text{total}}^{\text{learning}}
 }
 $$$
 
+> **Note**: $$\large P_{\text{average}}^{\text{unknown}}$$ is not included since cards with multiple unknown morphs shouldn't
+> studied, and it would therefore not be very meaningful.
+
 ### Target number of morphs
 
 <br>
@@ -158,8 +161,8 @@ $$$
 {\large
 D_{\text{target}}^{\text{all}} =
 \begin{cases}
-a_H (|n - T_H|^2) + b_H |n - T_H| + c_H & \text{if } n > T_H \\
-a_L (|n - T_L|^2) + b_L |n - T_L| + c_L & \text{if } n < T_L \\
+\lceil a_H (|n - T_H|^2) + b_H |n - T_H| + c_H\rceil & \text{if } n > T_H \\
+\lceil a_L (|n - T_L|^2) + b_L |n - T_L| + c_L\rceil & \text{if } n < T_L \\
 0 & \text{otherwise}
 \end{cases}
 }
@@ -171,8 +174,8 @@ $$$
 {\large
 D_{\text{target}}^{\text{learning}} =
 \begin{cases}
-a_H (|n_L - T_H|^2) + b_H |n_L - T_H| + c_H & \text{if } n_L > T_H \\
-a_L (|n_L - T_L|^2) + b_L |n_L - T_L| + c_L & \text{if } n_L < T_L \\
+\lceil a_H (|n_L - T_H|^2) + b_H |n_L - T_H| + c_H\rceil & \text{if } n_L > T_H \\
+\lceil a_L (|n_L - T_L|^2) + b_L |n_L - T_L| + c_L\rceil & \text{if } n_L < T_L \\
 0 & \text{otherwise}
 \end{cases}
 }
@@ -183,6 +186,7 @@ $$$
 {\large
 \begin{align*}
 & D_{\text{target}}: \text{target difference} \\
+& \lceil \; \rceil: \text{round up to the nearest integer} \\
 & T_H: \text{high target} \\
 & T_L: \text{low target} \\
 & n: \text{number of morphs} = \left| M \right|\\

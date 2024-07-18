@@ -2,14 +2,17 @@ from ..ankimorphs_config import AnkiMorphsConfig
 from ..morpheme import Morpheme
 
 
-class CardMorphsMetrics:
+class CardMorphsMetrics:  # pylint:disable=too-many-instance-attributes
     __slots__ = (
         "all_morphs",
         "unknown_morphs",
         "num_learning_morphs",
         "has_learning_morphs",
-        "total_priority_unknown_morphs",
         "total_priority_all_morphs",
+        "total_priority_unknown_morphs",
+        "total_priority_learning_morphs",
+        "avg_priority_all_morphs",
+        "avg_priority_learning_morphs",
     )
 
     def __init__(
@@ -23,16 +26,18 @@ class CardMorphsMetrics:
         self.unknown_morphs: list[Morpheme] = []
         self.num_learning_morphs: int = 0
         self.has_learning_morphs: bool = False
-        self.total_priority_unknown_morphs = 0
-        self.total_priority_all_morphs = 0
+        self.total_priority_all_morphs: int = 0
+        self.total_priority_unknown_morphs: int = 0
+        self.total_priority_learning_morphs: int = 0
+        self.avg_priority_all_morphs: int = 0
+        self.avg_priority_learning_morphs: int = 0
 
         try:
-            card_morphs: list[Morpheme] = card_morph_map_cache[card_id]
+            self.all_morphs = card_morph_map_cache[card_id]
         except KeyError:
             # card does not have morphs or is buggy in some way
             return
 
-        self.all_morphs = card_morphs
         self._process(am_config, morph_priorities)
 
     def _process(
@@ -75,9 +80,17 @@ class CardMorphsMetrics:
                 self.total_priority_unknown_morphs += morph_priority
             elif learning_interval < am_config.interval_for_known_morphs:
                 self.num_learning_morphs += 1
+                self.total_priority_learning_morphs += morph_priority
+
+        self.avg_priority_all_morphs = int(
+            self.total_priority_all_morphs / len(self.all_morphs)
+        )
 
         if self.num_learning_morphs > 0:
             self.has_learning_morphs = True
+            self.avg_priority_learning_morphs = int(
+                self.total_priority_learning_morphs / self.num_learning_morphs
+            )
 
     @staticmethod
     def get_unknown_inflections(

@@ -146,7 +146,7 @@ class SettingsDialog(QDialog):  # pylint:disable=too-many-instance-attributes
     ) -> None:
         assert mw is not None
 
-        new_config: dict[str, str | int | bool | object] = {}
+        new_config: dict[str, str | int | float | bool | object] = {}
         for _tab in self._all_tabs:
             new_config.update(_tab.settings_to_dict())
 

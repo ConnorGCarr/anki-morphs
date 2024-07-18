@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 from aqt.qt import (  # pylint:disable=no-name-in-module
     QCheckBox,
     QDialog,
+    QDoubleSpinBox,
     QKeySequenceEdit,
     QLineEdit,
     QRadioButton,
@@ -32,7 +33,7 @@ class SettingsTab(ABC):  # pylint:disable=too-many-instance-attributes
 
         self._raw_config_key_to_radio_button: dict[str, QRadioButton] = {}
         self._raw_config_key_to_check_box: dict[str, QCheckBox] = {}
-        self._raw_config_key_to_spin_box: dict[str, QSpinBox] = {}
+        self._raw_config_key_to_spin_box: dict[str, QSpinBox | QDoubleSpinBox] = {}
         self._raw_config_key_to_line_edit: dict[str, QLineEdit] = {}
         self._raw_config_key_to_key_sequence: dict[str, QKeySequenceEdit] = {}
 
@@ -119,7 +120,7 @@ class SettingsTab(ABC):  # pylint:disable=too-many-instance-attributes
     def restore_to_config_state(self) -> None:
         self.populate()
 
-    def settings_to_dict(self) -> dict[str, str | int | bool | object]:
+    def settings_to_dict(self) -> dict[str, str | int | float | bool | object]:
         radio_button_settings = {
             config_key: radio_button.isChecked()
             for config_key, radio_button in self._raw_config_key_to_radio_button.items()

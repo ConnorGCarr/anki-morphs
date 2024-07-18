@@ -1,6 +1,7 @@
-################################################################
-#                   ADDON SETTINGS/CONFIGS
-################################################################
+###################################################################################
+#                               ADDON SETTINGS/CONFIGS
+###################################################################################
+
 # Addons essentially only have one settings file that is shared
 # across all anki profiles, that file is found here:
 #    'Anki2/addons21/[addon]/meta.json'
@@ -12,11 +13,11 @@
 #
 # We can update meta.json with this:
 #   mw.addonManager.writeConfig(__name__, new_json_dict)
-
+#
 # We want to have individual profile settings, and we achieve this by storing
 # a file ("ankimorphs_profile_settings.json") in the individual profile folders.
 # When a profile is loaded by anki, that file is used to overwrite/update meta.json.
-################################################################
+###################################################################################
 
 from __future__ import annotations
 
@@ -110,12 +111,26 @@ class RawConfigKeys:
     TAG_LEARN_CARD_NOW = "tag_learn_card_now"
     EVALUATE_MORPH_LEMMA = "evaluate_morph_lemma"
     EVALUATE_MORPH_INFLECTION = "evaluate_morph_inflection"
-    ALGORITHM_TOTAL_PRIORITY_UNKNOWN_MORPHS = "algorithm_total_priority_unknown_morphs"
-    ALGORITHM_TOTAL_PRIORITY_ALL_MORPHS = "algorithm_total_priority_all_morphs"
-    ALGORITHM_AVERAGE_PRIORITY_ALL_MORPHS = "algorithm_average_priority_all_morphs"
-    ALGORITHM_ALL_MORPHS_TARGET_DISTANCE = "algorithm_all_morphs_target_distance"
-    ALGORITHM_LEARNING_MORPHS_TARGET_DISTANCE = (
-        "algorithm_learning_morphs_target_distance"
+    ALGORITHM_TOTAL_PRIORITY_UNKNOWN_MORPHS_WEIGHT = (
+        "algorithm_total_priority_unknown_morphs_weight"
+    )
+    ALGORITHM_TOTAL_PRIORITY_ALL_MORPHS_WEIGHT = (
+        "algorithm_total_priority_all_morphs_weight"
+    )
+    ALGORITHM_AVERAGE_PRIORITY_ALL_MORPHS_WEIGHT = (
+        "algorithm_average_priority_all_morphs_weight"
+    )
+    ALGORITHM_TOTAL_PRIORITY_LEARNING_MORPHS_WEIGHT = (
+        "algorithm_total_priority_learning_morphs_weight"
+    )
+    ALGORITHM_AVERAGE_PRIORITY_LEARNING_MORPHS_WEIGHT = (
+        "algorithm_average_priority_learning_morphs_weight"
+    )
+    ALGORITHM_ALL_MORPHS_TARGET_DIFFERENCE_WEIGHT = (
+        "algorithm_all_morphs_target_difference_weight"
+    )
+    ALGORITHM_LEARNING_MORPHS_TARGET_DIFFERENCE_WEIGHT = (
+        "algorithm_learning_morphs_target_difference_weight"
     )
     ALGORITHM_UPPER_TARGET_ALL_MORPHS = "algorithm_upper_target_all_morphs"
     ALGORITHM_UPPER_TARGET_ALL_MORPHS_COEFFICIENT_A = (
@@ -443,54 +458,78 @@ class AnkiMorphsConfig:  # pylint:disable=too-many-instance-attributes, too-many
                 expected_type=bool,
                 use_default=is_default,
             )
-            self.algorithm_total_priority_unknown_morphs: int = self._get_config_item(
-                key=RawConfigKeys.ALGORITHM_TOTAL_PRIORITY_UNKNOWN_MORPHS,
-                expected_type=int,
-                use_default=is_default,
+            self.algorithm_total_priority_unknown_morphs_weight: int = (
+                self._get_config_item(
+                    key=RawConfigKeys.ALGORITHM_TOTAL_PRIORITY_UNKNOWN_MORPHS_WEIGHT,
+                    expected_type=int,
+                    use_default=is_default,
+                )
             )
-            self.algorithm_total_priority_all_morphs: int = self._get_config_item(
-                key=RawConfigKeys.ALGORITHM_TOTAL_PRIORITY_ALL_MORPHS,
-                expected_type=int,
-                use_default=is_default,
+            self.algorithm_total_priority_all_morphs_weight: int = (
+                self._get_config_item(
+                    key=RawConfigKeys.ALGORITHM_TOTAL_PRIORITY_ALL_MORPHS_WEIGHT,
+                    expected_type=int,
+                    use_default=is_default,
+                )
             )
-            self.algorithm_average_priority_all_morphs: int = self._get_config_item(
-                key=RawConfigKeys.ALGORITHM_AVERAGE_PRIORITY_ALL_MORPHS,
-                expected_type=int,
-                use_default=is_default,
+            self.algorithm_average_priority_all_morphs_weight: int = (
+                self._get_config_item(
+                    key=RawConfigKeys.ALGORITHM_AVERAGE_PRIORITY_ALL_MORPHS_WEIGHT,
+                    expected_type=int,
+                    use_default=is_default,
+                )
             )
-            self.algorithm_all_morphs_target_distance: int = self._get_config_item(
-                key=RawConfigKeys.ALGORITHM_ALL_MORPHS_TARGET_DISTANCE,
-                expected_type=int,
-                use_default=is_default,
+            self.algorithm_total_priority_learning_morphs_weight: int = (
+                self._get_config_item(
+                    key=RawConfigKeys.ALGORITHM_TOTAL_PRIORITY_LEARNING_MORPHS_WEIGHT,
+                    expected_type=int,
+                    use_default=is_default,
+                )
             )
-            self.algorithm_learning_morphs_target_distance: int = self._get_config_item(
-                key=RawConfigKeys.ALGORITHM_LEARNING_MORPHS_TARGET_DISTANCE,
-                expected_type=int,
-                use_default=is_default,
+            self.algorithm_average_priority_learning_morphs_weight: int = (
+                self._get_config_item(
+                    key=RawConfigKeys.ALGORITHM_AVERAGE_PRIORITY_LEARNING_MORPHS_WEIGHT,
+                    expected_type=int,
+                    use_default=is_default,
+                )
+            )
+            self.algorithm_all_morphs_target_difference_weight: int = (
+                self._get_config_item(
+                    key=RawConfigKeys.ALGORITHM_ALL_MORPHS_TARGET_DIFFERENCE_WEIGHT,
+                    expected_type=int,
+                    use_default=is_default,
+                )
+            )
+            self.algorithm_learning_morphs_target_difference_weight: int = (
+                self._get_config_item(
+                    key=RawConfigKeys.ALGORITHM_LEARNING_MORPHS_TARGET_DIFFERENCE_WEIGHT,
+                    expected_type=int,
+                    use_default=is_default,
+                )
             )
             self.algorithm_upper_target_all_morphs: int = self._get_config_item(
                 key=RawConfigKeys.ALGORITHM_UPPER_TARGET_ALL_MORPHS,
                 expected_type=int,
                 use_default=is_default,
             )
-            self.algorithm_upper_target_all_morphs_coefficient_a: int = (
+            self.algorithm_upper_target_all_morphs_coefficient_a: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_UPPER_TARGET_ALL_MORPHS_COEFFICIENT_A,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_upper_target_all_morphs_coefficient_b: int = (
+            self.algorithm_upper_target_all_morphs_coefficient_b: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_UPPER_TARGET_ALL_MORPHS_COEFFICIENT_B,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_upper_target_all_morphs_coefficient_c: int = (
+            self.algorithm_upper_target_all_morphs_coefficient_c: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_UPPER_TARGET_ALL_MORPHS_COEFFICIENT_C,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
@@ -499,24 +538,24 @@ class AnkiMorphsConfig:  # pylint:disable=too-many-instance-attributes, too-many
                 expected_type=int,
                 use_default=is_default,
             )
-            self.algorithm_lower_target_all_morphs_coefficient_a: int = (
+            self.algorithm_lower_target_all_morphs_coefficient_a: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_LOWER_TARGET_ALL_MORPHS_COEFFICIENT_A,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_lower_target_all_morphs_coefficient_b: int = (
+            self.algorithm_lower_target_all_morphs_coefficient_b: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_LOWER_TARGET_ALL_MORPHS_COEFFICIENT_B,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_lower_target_all_morphs_coefficient_c: int = (
+            self.algorithm_lower_target_all_morphs_coefficient_c: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_LOWER_TARGET_ALL_MORPHS_COEFFICIENT_C,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
@@ -530,45 +569,45 @@ class AnkiMorphsConfig:  # pylint:disable=too-many-instance-attributes, too-many
                 expected_type=int,
                 use_default=is_default,
             )
-            self.algorithm_upper_target_learning_morphs_coefficient_a: int = (
+            self.algorithm_upper_target_learning_morphs_coefficient_a: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_UPPER_TARGET_LEARNING_MORPHS_COEFFICIENT_A,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_upper_target_learning_morphs_coefficient_b: int = (
+            self.algorithm_upper_target_learning_morphs_coefficient_b: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_UPPER_TARGET_LEARNING_MORPHS_COEFFICIENT_B,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_upper_target_learning_morphs_coefficient_c: int = (
+            self.algorithm_upper_target_learning_morphs_coefficient_c: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_UPPER_TARGET_LEARNING_MORPHS_COEFFICIENT_C,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_lower_target_learning_morphs_coefficient_a: int = (
+            self.algorithm_lower_target_learning_morphs_coefficient_a: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_LOWER_TARGET_LEARNING_MORPHS_COEFFICIENT_A,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_lower_target_learning_morphs_coefficient_b: int = (
+            self.algorithm_lower_target_learning_morphs_coefficient_b: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_LOWER_TARGET_LEARNING_MORPHS_COEFFICIENT_B,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
-            self.algorithm_lower_target_learning_morphs_coefficient_c: int = (
+            self.algorithm_lower_target_learning_morphs_coefficient_c: float = (
                 self._get_config_item(
                     key=RawConfigKeys.ALGORITHM_LOWER_TARGET_LEARNING_MORPHS_COEFFICIENT_C,
-                    expected_type=int,
+                    expected_type=float,
                     use_default=is_default,
                 )
             )
@@ -682,7 +721,7 @@ def get_all_defaults_config_dict() -> dict[str, Any]:
     return default_config_dict
 
 
-def update_configs(new_configs: dict[str, str | int | bool | object]) -> None:
+def update_configs(new_configs: dict[str, str | int | float | bool | object]) -> None:
     assert mw is not None
     config = mw.addonManager.getConfig(__name__)
     assert config is not None

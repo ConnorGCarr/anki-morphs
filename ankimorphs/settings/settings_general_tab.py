@@ -3,6 +3,7 @@ from __future__ import annotations
 from aqt.qt import (  # pylint:disable=no-name-in-module
     QCheckBox,
     QDialog,
+    QDoubleSpinBox,
     QRadioButton,
     QSpinBox,
 )
@@ -33,7 +34,7 @@ class GeneralTab(SettingsTab):
             RawConfigKeys.READ_KNOWN_MORPHS_FOLDER: self.ui.recalcReadKnownMorphsFolderCheckBox,
         }
 
-        self._raw_config_key_to_spin_box: dict[str, QSpinBox] = {
+        self._raw_config_key_to_spin_box: dict[str, QSpinBox | QDoubleSpinBox] = {
             RawConfigKeys.INTERVAL_FOR_KNOWN_MORPHS: self.ui.recalcIntervalSpinBox,
         }
 

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>923</width>
-    <height>466</height>
+    <height>478</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -843,23 +843,30 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_28">
                <item>
-                <widget class="QLabel" name="label_27">
+                <widget class="QLabel" name="label_28">
                  <property name="text">
-                  <string>Total priority unknown morphs</string>
+                  <string>Total priority of all morphs</string>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="label_28">
+                <widget class="QLabel" name="label_27">
                  <property name="text">
-                  <string>Total priority all morphs</string>
+                  <string>Total priority of unknown morphs</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_47">
+                 <property name="text">
+                  <string>Total priority of learning morphs</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLabel" name="label_29">
                  <property name="text">
-                  <string>All morphs target distance</string>
+                  <string>Target difference of all morphs</string>
                  </property>
                 </widget>
                </item>
@@ -871,36 +878,62 @@
                 <number>7</number>
                </property>
                <item>
-                <widget class="QSpinBox" name="totalPriorityUknownMorphsSpinBox"/>
+                <widget class="QSpinBox" name="totalPriorityAllMorphsSpinBox">
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="totalPriorityAllMorphsSpinBox"/>
+                <widget class="QSpinBox" name="totalPriorityUknownMorphsSpinBox">
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="allMorphsTargetDistanceSpinBox"/>
+                <widget class="QSpinBox" name="totalPriorityLearningMorphsSpinBox">
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="targetDifferenceAllMorphsSpinBox">
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_32">
                <item>
-                <widget class="QLabel" name="label_26">
+                <widget class="QLabel" name="label_38">
+                 <property name="text">
+                  <string>Average priority of all morphs</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_49">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QLabel" name="label_38">
+                <widget class="QLabel" name="label_48">
                  <property name="text">
-                  <string>Average priority all morphs</string>
+                  <string>Average priority of learning morphs</string>
                  </property>
                 </widget>
                </item>
                <item>
                 <widget class="QLabel" name="label_41">
                  <property name="text">
-                  <string>Learning morphs target distance</string>
+                  <string>Target difference of learning morphs</string>
                  </property>
                 </widget>
                </item>
@@ -909,17 +942,32 @@
              <item>
               <layout class="QVBoxLayout" name="verticalLayout_33">
                <item>
-                <widget class="QLabel" name="label_34">
+                <widget class="QSpinBox" name="averagePriorityAllMorphsSpinBox">
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLabel" name="label_26">
                  <property name="text">
                   <string/>
                  </property>
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="averagePriorityAllMorphsSpinBox"/>
+                <widget class="QSpinBox" name="averagePriorityLearningMorphsSpinBox">
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="learningMorphsTargetDistanceSpinBox"/>
+                <widget class="QSpinBox" name="targetDifferenceLearningMorphsSpinBox">
+                 <property name="maximum">
+                  <number>999</number>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -981,13 +1029,43 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="upperTargetAllMorphsCoefficientA"/>
+              <widget class="QDoubleSpinBox" name="upperTargetAllMorphsCoefficientA">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="upperTargetAllMorphsCoefficientB"/>
+              <widget class="QDoubleSpinBox" name="upperTargetAllMorphsCoefficientB">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="upperTargetAllMorphsCoefficientC"/>
+              <widget class="QDoubleSpinBox" name="upperTargetAllMorphsCoefficientC">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
               <spacer name="horizontalSpacer_14">
@@ -1031,13 +1109,43 @@
               </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="lowerTargetAllMorphsCoefficientA"/>
+              <widget class="QDoubleSpinBox" name="lowerTargetAllMorphsCoefficientA">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="lowerTargetAllMorphsCoefficientB"/>
+              <widget class="QDoubleSpinBox" name="lowerTargetAllMorphsCoefficientB">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="lowerTargetAllMorphsCoefficientC"/>
+              <widget class="QDoubleSpinBox" name="lowerTargetAllMorphsCoefficientC">
+               <property name="decimals">
+                <number>1</number>
+               </property>
+               <property name="maximum">
+                <double>10.000000000000000</double>
+               </property>
+               <property name="singleStep">
+                <double>0.100000000000000</double>
+               </property>
+              </widget>
              </item>
              <item>
               <spacer name="horizontalSpacer_15">
@@ -1083,13 +1191,43 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="upperTargetLearningMorphsCoefficientA"/>
+                <widget class="QDoubleSpinBox" name="upperTargetLearningMorphsCoefficientA">
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <double>10.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="upperTargetLearningMorphsCoefficientB"/>
+                <widget class="QDoubleSpinBox" name="upperTargetLearningMorphsCoefficientB">
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <double>10.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="upperTargetLearningMorphsCoefficientC"/>
+                <widget class="QDoubleSpinBox" name="upperTargetLearningMorphsCoefficientC">
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <double>10.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <spacer name="horizontalSpacer_16">
@@ -1133,13 +1271,43 @@
                 </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="lowerTargetLearningMorphsCoefficientA"/>
+                <widget class="QDoubleSpinBox" name="lowerTargetLearningMorphsCoefficientA">
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <double>10.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="lowerTargetLearningMorphsCoefficientB"/>
+                <widget class="QDoubleSpinBox" name="lowerTargetLearningMorphsCoefficientB">
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <double>10.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
-                <widget class="QSpinBox" name="lowerTargetLearningMorphsCoefficientC"/>
+                <widget class="QDoubleSpinBox" name="lowerTargetLearningMorphsCoefficientC">
+                 <property name="decimals">
+                  <number>1</number>
+                 </property>
+                 <property name="maximum">
+                  <double>10.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
+                 </property>
+                </widget>
                </item>
                <item>
                 <spacer name="horizontalSpacer_17">

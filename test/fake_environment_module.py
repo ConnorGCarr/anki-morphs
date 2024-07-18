@@ -92,7 +92,8 @@ def fake_environment_fixture(  # pylint:disable=too-many-locals, too-many-statem
     try:
         _collection_file_name: str = request.param.collection
         if _collection_file_name is None:
-            # this is a small collection, otherwise a completely arbitrary choice
+            # note: this collection is chosen as the default because
+            # of its small size.
             _collection_file_name = "ignore_names_txt_collection"
         assert isinstance(_collection_file_name, str)
 

@@ -1,3 +1,5 @@
+import math
+
 from ..ankimorphs_config import AnkiMorphsConfig
 from .card_morphs_metrics import CardMorphsMetrics
 
@@ -116,36 +118,43 @@ class CardScore:
             num_morphs=card_morph_metrics.num_learning_morphs,
         )
 
-        all_morphs_avg_priority = int(
-            card_morph_metrics.total_priority_all_morphs
-            / len(card_morph_metrics.all_morphs)
-        )
-
         all_morphs_total_priority_score = (
-            am_config.algorithm_total_priority_all_morphs
+            am_config.algorithm_total_priority_all_morphs_weight
             * card_morph_metrics.total_priority_all_morphs
         )
         unknown_morphs_total_priority_score = (
-            am_config.algorithm_total_priority_unknown_morphs
+            am_config.algorithm_total_priority_unknown_morphs_weight
             * card_morph_metrics.total_priority_unknown_morphs
+        )
+        learning_morphs_total_priority_score = (
+            am_config.algorithm_total_priority_learning_morphs_weight
+            * card_morph_metrics.total_priority_learning_morphs
         )
 
         all_morphs_avg_priority_score = (
-            am_config.algorithm_average_priority_all_morphs * all_morphs_avg_priority
+            am_config.algorithm_average_priority_all_morphs_weight
+            * card_morph_metrics.avg_priority_all_morphs
         )
+        learning_morphs_avg_priority_score = (
+            am_config.algorithm_average_priority_learning_morphs_weight
+            * card_morph_metrics.avg_priority_learning_morphs
+        )
+
         leaning_morphs_target_difference_score = (
-            am_config.algorithm_learning_morphs_target_distance
+            am_config.algorithm_learning_morphs_target_difference_weight
             * learning_morphs_target_difference
         )
         all_morphs_target_difference_score = (
-            am_config.algorithm_all_morphs_target_distance
+            am_config.algorithm_all_morphs_target_difference_weight
             * all_morphs_target_difference
         )
 
         tuning: int = (
-            unknown_morphs_total_priority_score
+            all_morphs_total_priority_score
+            + unknown_morphs_total_priority_score
+            + learning_morphs_total_priority_score
             + all_morphs_avg_priority_score
-            + all_morphs_total_priority_score
+            + learning_morphs_avg_priority_score
             + leaning_morphs_target_difference_score
             + all_morphs_target_difference_score
         )
@@ -162,9 +171,11 @@ class CardScore:
         # Note: we have a whitespace before the <br> tags to avoid bugs
         self.terms = f"""
                 unknown_morphs_amount_score: {unknown_morphs_amount_score}, <br>
-                unknown_morphs_total_priority_score: {unknown_morphs_total_priority_score}, <br>
-                all_morphs_avg_priority_score: {all_morphs_avg_priority_score}, <br>
                 all_morphs_total_priority_score: {all_morphs_total_priority_score}, <br>
+                unknown_morphs_total_priority_score: {unknown_morphs_total_priority_score}, <br>
+                learning_morphs_total_priority_score: {learning_morphs_total_priority_score}, <br>
+                all_morphs_avg_priority_score: {all_morphs_avg_priority_score}, <br>
+                learning_morphs_avg_priority_score: {learning_morphs_avg_priority_score}, <br>
                 leaning_morphs_target_difference_score: {leaning_morphs_target_difference_score}, <br>
                 all_morphs_target_difference_score: {all_morphs_target_difference_score}
             """
@@ -222,8 +233,8 @@ def _get_morph_targets_difference(
     num_morphs: int,
     high_target: int,
     low_target: int,
-    coefficients_high: tuple[int, int, int],
-    coefficients_low: tuple[int, int, int],
+    coefficients_high: tuple[float, float, float],
+    coefficients_low: tuple[float, float, float],
 ) -> int:
     if num_morphs > high_target:
         difference = abs(num_morphs - high_target)
@@ -234,5 +245,5 @@ def _get_morph_targets_difference(
     else:
         return 0
 
-    # https://www.geogebra.org/graphing/ta3eqb8y
-    return a * (difference**2) + b * difference + c
+    # visualizing/playground: https://www.geogebra.org/graphing/ta3eqb8y
+    return math.ceil(a * (difference**2) + b * difference + c)

@@ -51,32 +51,55 @@ Run: `pytest --cov=ankimorphs --cov-report html` and click on `index.html` in `h
 
 ## Card collections
 
+Note:
+  - all of these collections have all the extra fields selected
+  - the extra fields contain inflections unless stated otherwise
+  - morphs are evaluated based on inflections unless stated otherwise
+  - morphs priority is 'Collection Frequency' unless stated otherwise
+
 Current card collections (test/data/card_collections):
 - `lemma_evaluation_lemma_extra_fields_collection.anki2`
   - contains two "known" cards ("the", "man"), and then 9 cards with 4 lemmas and 9 inflections.
   this is used for testing if the inflections are given the scores of their respective lemmas and
   the inflections are skipped on review.
+  - the extra fields contain lemmas
+  - morphs are evaluated based on lemma
+  - morphemizer: 'spaCy: en_core_web_sm'
 - `some_studied_lemmas_collection.anki2`
   - duplicate of `lemma_evaluation_lemma_extra_fields_collection.anki2`, but one card for each lemma
   has been studied, so the other cards that have those lemmas should contain no unknowns.
+  - the extra fields contain lemmas
+  - morphs are evaluated based on lemma
+  - morphemizer: 'spaCy: en_core_web_sm'
 - `big_japanese_collection.anki2`
   - monolithic card collection (https://github.com/mortii/anki-decks)
+  - morphemizer: 'Ankimorphs Japanese'
 - `ignore_names_txt_collection.anki2`
   - Contains one card that has two names, one of which is found in names.txt
+  - morphemizer: 'AnkiMorphs: Language w/ Spaces'
 - `known-morphs-collection.anki2`
-  - contains one card with 7 morphs, 5 of which are found in the 'known-morphs-valid' directory
+  - contains one card with 7 morphs, 6 of which are found in the 'known-morphs-valid' directory
+  - morphemizer: 'AnkiMorphs: Language w/ Spaces'
 - `offset_new_cards_inflection_collection.anki2`
   - Contains two cards, both with "hello".
+  - `recalc_offset_new_cards` config option enabled
+  - morphemizer: 'AnkiMorphs: Language w/ Spaces'
 - `offset_new_cards_lemma_collection.anki2`
-  - duplicate of `lemma_evaluation_lemma_extra_fields_collection.anki2`, but has used the `recalc_offset_new_cards` config option
+  - duplicate of `lemma_evaluation_lemma_extra_fields_collection.anki2`, but has uses the `recalc_offset_new_cards`
+  config option enabled
+  - the extra fields contain lemmas
+  - morphs are evaluated based on lemma
+  - morphemizer: 'spaCy: en_core_web_sm'
 - `some_studied_japanese_collection.anki2`
   - contains three cards:
     - one that has the tag 'am-known-manually'
     - one with a learning interval of 1 day
     - one with a learning interval of 30+ days
+  - morphemizer: 'Ankimorphs Japanese'
 - `max_morph_priority_collection.anki2`
   - contains two cards, and uses the frequency file `ja_core_news_sm_freq_inflection_min_occurrence.csv`. One card
   has a morph that is found in the frequency file, the other card does not, which should give it a max morph priority value.
+  - morphemizer: 'spaCy: ja_core_news_sm'
 
 ## Engineering and adding collections
 
