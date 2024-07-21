@@ -30,13 +30,13 @@ from ..exceptions import (
     KnownMorphsFileMalformedException,
     MorphemizerNotFoundException,
 )
+from ..morph_priority_utils import get_morph_priority
 from ..morpheme import Morpheme
 from ..morphemizers import morphemizer as morphemizer_module
 from . import caching, extra_field_utils
 from .anki_data_utils import AnkiMorphsCardData
 from .card_morphs_metrics import CardMorphsMetrics
 from .card_score import _DEFAULT_SCORE, CardScore
-from .morph_priority_utils import _get_morph_priority
 
 
 def recalc() -> None:
@@ -182,8 +182,10 @@ def _update_cards_and_notes(  # pylint:disable=too-many-locals, too-many-stateme
         field_name_dict: dict[str, tuple[int, FieldDict]] = model_manager.field_map(
             note_type_dict
         )
-        morph_priorities: dict[tuple[str, str], int] = _get_morph_priority(
-            am_db, am_config, config_filter
+        morph_priorities: dict[tuple[str, str], int] = get_morph_priority(
+            am_db=am_db,
+            only_lemma_priorities=am_config.evaluate_morph_lemma,
+            morph_priority_selection=config_filter.morph_priority_selection,
         )
         cards_data_dict: dict[int, AnkiMorphsCardData] = am_db.get_am_cards_data_dict(
             note_type_id=model_manager.id_for_name(config_filter.note_type)

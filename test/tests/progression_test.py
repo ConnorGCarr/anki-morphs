@@ -10,7 +10,6 @@ from typing import Any
 import pytest
 from aqt.qt import QTableWidgetItem  # pylint:disable=no-name-in-module
 
-from ankimorphs.exceptions import NoMorphsInPriorityRangeException
 from ankimorphs.progression.progression_window import ProgressionWindow
 
 ################################################################
@@ -30,6 +29,7 @@ case_some_studied_japanese_params = FakeEnvironmentParams(
 )
 
 
+@pytest.mark.debug
 @pytest.mark.parametrize(
     "fake_environment_fixture, evaluate_lemmas, priority_mode,"  # inputs
     "cumulative, min_priority, max_priority, bin_size,"  # inputs
@@ -133,10 +133,7 @@ def test_progression(  # pylint:disable=too-many-arguments, unused-argument, too
     pw.ui.binSizeSpinBox.setValue(bin_size)
 
     # Calculate progress
-    try:
-        pw._background_calculate_progress_and_populate_tables()
-    except NoMorphsInPriorityRangeException:
-        print("raised NoMorphsInPriorityRangeException")
+    pw._background_calculate_progress_and_populate_tables()
 
     # Compare to known output
     _item: QTableWidgetItem | None

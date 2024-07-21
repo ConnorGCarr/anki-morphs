@@ -93,7 +93,6 @@ def get_progress_reports(
     morph_priorities: dict[tuple[str, str], int],
     only_lemma_priorities: bool,
 ) -> list[ProgressReport]:
-
     reports = []
 
     # This function could be cleaner if the learning status dictionaries were

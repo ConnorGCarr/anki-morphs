@@ -6,11 +6,10 @@ from typing import Any
 
 from aqt import mw
 
-from .. import ankimorphs_globals as am_globals
-from ..ankimorphs_config import AnkiMorphsConfig, AnkiMorphsConfigFilter
-from ..ankimorphs_db import AnkiMorphsDB
-from ..exceptions import FrequencyFileMalformedException, FrequencyFileNotFoundException
-from .card_score import MORPH_UNKNOWN_PENALTY
+from . import ankimorphs_globals as am_globals
+from .ankimorphs_db import AnkiMorphsDB
+from .exceptions import FrequencyFileMalformedException, FrequencyFileNotFoundException
+from .recalc.card_score import MORPH_UNKNOWN_PENALTY
 
 
 class FrequencyFileType:
@@ -42,19 +41,19 @@ class FrequencyFile:
         self.inflection_priority_header_index = inflection_priority_header_index
 
 
-def _get_morph_priority(
+def get_morph_priority(
     am_db: AnkiMorphsDB,
-    am_config: AnkiMorphsConfig,
-    am_config_filter: AnkiMorphsConfigFilter,
+    only_lemma_priorities: bool,
+    morph_priority_selection: str,
 ) -> dict[tuple[str, str], int]:
-    if am_config_filter.morph_priority_selection == am_globals.COLLECTION_FREQUENCY_OPTION:  # fmt: skip
+    if morph_priority_selection == am_globals.COLLECTION_FREQUENCY_OPTION:  # fmt: skip
         return am_db.get_morph_priorities_from_collection(
-            only_lemma_priorities=am_config.evaluate_morph_lemma
+            only_lemma_priorities=only_lemma_priorities
         )
 
     return _load_morph_priorities_from_file(
-        frequency_file_name=am_config_filter.morph_priority_selection,
-        only_lemma_priorities=am_config.evaluate_morph_lemma,
+        frequency_file_name=morph_priority_selection,
+        only_lemma_priorities=only_lemma_priorities,
     )
 
 

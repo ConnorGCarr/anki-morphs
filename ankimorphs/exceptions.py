@@ -49,14 +49,6 @@ class InvalidBinsException(Exception):
         self.max_index = max_index
 
 
-class NoMorphsInPriorityRangeException(Exception):
-    """No morphs were specified within a given priority range."""
-
-    def __init__(self, min_priority: int, max_priority: int):
-        self.min_priority = min_priority
-        self.max_priority = max_priority
-
-
 class FrequencyFileMalformedException(Exception):
     """Selected frequency file is malformed in some way"""
 

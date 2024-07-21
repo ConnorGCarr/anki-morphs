@@ -8,10 +8,9 @@ from test.fake_environment_module import (  # pylint:disable=unused-import
 
 import pytest
 
-from ankimorphs import debugging_utils
+from ankimorphs import debugging_utils, morph_priority_utils
 from ankimorphs.ankimorphs_config import AnkiMorphsConfig
 from ankimorphs.exceptions import FrequencyFileMalformedException
-from ankimorphs.recalc import morph_priority_utils
 
 # we don't need any special parameters for these tests
 default_fake_environment_params = FakeEnvironmentParams()
@@ -114,10 +113,10 @@ def test_morph_priority_with_collection_frequency(  # pylint:disable=unused-argu
 ) -> None:
     am_config = AnkiMorphsConfig()
 
-    morph_priorities = morph_priority_utils._get_morph_priority(
+    morph_priorities = morph_priority_utils.get_morph_priority(
         am_db=fake_environment_fixture.mock_db,
-        am_config=am_config,
-        am_config_filter=am_config.filters[0],
+        only_lemma_priorities=am_config.evaluate_morph_lemma,
+        morph_priority_selection=am_config.filters[0].morph_priority_selection,
     )
 
     json_file_path = Path(

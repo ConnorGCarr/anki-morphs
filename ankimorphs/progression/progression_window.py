@@ -17,16 +17,14 @@ from aqt.qt import (  # pylint:disable=no-name-in-module
 )
 from aqt.utils import tooltip
 
-from .. import ankimorphs_globals
+from .. import ankimorphs_globals, morph_priority_utils
 from ..ankimorphs_config import AnkiMorphsConfig
 from ..ankimorphs_db import AnkiMorphsDB
 from ..exceptions import (
     CancelledOperationException,
     FrequencyFileMalformedException,
     InvalidBinsException,
-    NoMorphsInPriorityRangeException,
 )
-from ..recalc.morph_priority_utils import _load_morph_priorities_from_file
 from ..table_utils import QTableWidgetIntegerItem, QTableWidgetPercentItem
 from ..ui.progression_window_ui import Ui_ProgressionWindow
 from .progression_utils import (
@@ -149,7 +147,6 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
         operation.with_progress().run_in_background()
 
     def _get_selected_bins(self) -> Bins:
-
         return Bins(
             min_index=self.ui.minPrioritySpinBox.value(),
             max_index=self.ui.maxPrioritySpinBox.value(),
@@ -157,42 +154,34 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
             is_cumulative=self.ui.cumulativeCheckBox.isChecked(),
         )
 
-    def _get_selected_morph_priorities(self) -> dict[tuple[str, str], int]:
-
-        am_db = AnkiMorphsDB()
-
-        if self.ui.morphPriorityCBox.currentIndex() == 0:  # Collection frequency
-            return am_db.get_morph_priorities_from_collection(
-                only_lemma_priorities=self._is_lemma_priority_selected()
-            )
-        # Else
-        return _load_morph_priorities_from_file(
-            frequency_file_name=self.ui.morphPriorityCBox.currentText(),
-            only_lemma_priorities=self._is_lemma_priority_selected(),
-        )
-
     def _is_lemma_priority_selected(self) -> bool:
-
         return self.ui.lemmaRadioButton.isChecked()
 
     def _background_calculate_progress_and_populate_tables(self) -> None:
         assert mw is not None
 
         am_db = AnkiMorphsDB()
-
         bins = self._get_selected_bins()
 
-        morph_priorities = self._get_selected_morph_priorities()
+        morph_priorities = morph_priority_utils.get_morph_priority(
+            am_db=am_db,
+            only_lemma_priorities=self._is_lemma_priority_selected(),
+            morph_priority_selection=self.ui.morphPriorityCBox.currentText(),
+        )
+
         mw.taskman.run_on_main(
             partial(
                 mw.progress.update,
                 label="Calculating binned statistics",
             )
         )
+
         reports = get_progress_reports(
             am_db, bins, morph_priorities, self._is_lemma_priority_selected()
         )
+
         if mw.progress.want_cancel():
+            am_db.con.close()
             raise CancelledOperationException
 
         mw.taskman.run_on_main(
@@ -204,6 +193,9 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
         morph_statuses = get_priority_ordered_morph_statuses(
             am_db, bins, morph_priorities, self._is_lemma_priority_selected()
         )
+
+        am_db.con.close()
+
         if mw.progress.want_cancel():
             raise CancelledOperationException
 
@@ -220,7 +212,7 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
         reports: list[ProgressReport],
         morph_statuses: list[tuple[int, str, str, str]],
     ) -> None:
-
+        assert mw is not None
         assert isinstance(self.ui, Ui_ProgressionWindow)
 
         self.ui.numericalTableWidget.clearContents()
@@ -246,12 +238,14 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
             self._populate_morph_table(morph_status, row)
 
         if error_indexes is not None:
-            raise NoMorphsInPriorityRangeException(
-                min_priority=error_indexes[0], max_priority=error_indexes[1]
+            mw.taskman.run_on_main(
+                lambda: tooltip(
+                    f"No morphs in priority range {error_indexes[0]}-{error_indexes[1]}",
+                    parent=self,
+                )
             )
 
     def _populate_numerical_table(self, report: ProgressReport, row: int) -> None:
-
         morph_priorities_item = QTableWidgetItem(
             f"{report.min_priority}-{report.max_priority}"
         )
@@ -286,7 +280,6 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
         )
 
     def _populate_percent_table(self, report: ProgressReport, row: int) -> None:
-
         known_percent = round(
             report.get_total_known() / report.get_total_morphs() * 100, 1
         )
@@ -384,7 +377,6 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
         error: (
             Exception
             | CancelledOperationException
-            | NoMorphsInPriorityRangeException
             | FrequencyFileMalformedException
             | InvalidBinsException
         ),
@@ -399,11 +391,6 @@ class ProgressionWindow(QMainWindow):  # pylint:disable=too-many-instance-attrib
 
         if isinstance(error, CancelledOperationException):
             tooltip("Cancelled progress report calculation", parent=self)
-        elif isinstance(error, NoMorphsInPriorityRangeException):
-            tooltip(
-                f"No morphs in priority range {error.min_priority}-{error.max_priority}",
-                parent=self,
-            )
         elif isinstance(error, FrequencyFileMalformedException):
             tooltip(error.reason, parent=self)
         elif isinstance(error, InvalidBinsException):

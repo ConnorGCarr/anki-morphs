@@ -30,6 +30,7 @@ from ankimorphs import (
     ankimorphs_db,
     ankimorphs_globals,
     known_morphs_exporter,
+    morph_priority_utils,
     name_file_utils,
     progress_utils,
     reviewing_utils,
@@ -37,12 +38,7 @@ from ankimorphs import (
 from ankimorphs.generators import generators_utils, generators_window
 from ankimorphs.morphemizers import spacy_wrapper
 from ankimorphs.progression import progression_utils, progression_window
-from ankimorphs.recalc import (
-    anki_data_utils,
-    caching,
-    morph_priority_utils,
-    recalc_main,
-)
+from ankimorphs.recalc import anki_data_utils, caching, recalc_main
 
 
 class FakeEnvironmentParams:
@@ -128,7 +124,7 @@ def fake_environment_fixture(  # pylint:disable=too-many-locals, too-many-statem
     path_original_collection_media = Path(
         PATH_CARD_COLLECTIONS, f"{_collection_file_name}.media"
     )
-    collection_path_duplicate = Path(
+    path_duplicate_collection = Path(
         PATH_CARD_COLLECTIONS, f"duplicate_{_collection_file_name}.anki2"
     )
     collection_path_duplicate_media = Path(
@@ -138,11 +134,11 @@ def fake_environment_fixture(  # pylint:disable=too-many-locals, too-many-statem
     test_db_original_path = Path(PATH_TESTS_DATA_DBS, _am_db_name)
 
     # If the destination already exists, it will be replaced
-    shutil.copyfile(path_original_collection, collection_path_duplicate)
+    shutil.copyfile(path_original_collection, path_duplicate_collection)
     shutil.copyfile(test_db_original_path, PATH_DB_COPY)
 
     mock_mw = mock.Mock(spec=aqt.mw)
-    mock_mw.col = Collection(str(collection_path_duplicate))
+    mock_mw.col = Collection(str(path_duplicate_collection))
     mock_mw.backend = setupLangAndBackend(
         pm=mock.Mock(name="fake_pm"), app=mock.Mock(name="fake_app"), force="en"
     )
@@ -276,7 +272,7 @@ def fake_environment_fixture(  # pylint:disable=too-many-locals, too-many-statem
     sys.path.remove(str(fake_morphemizers_path))
 
     Path.unlink(PATH_DB_COPY, missing_ok=True)
-    Path.unlink(collection_path_duplicate, missing_ok=True)
+    Path.unlink(path_duplicate_collection, missing_ok=True)
     shutil.rmtree(path_original_collection_media, ignore_errors=True)
     shutil.rmtree(collection_path_duplicate_media, ignore_errors=True)
 
