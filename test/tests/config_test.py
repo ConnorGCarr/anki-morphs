@@ -8,7 +8,7 @@ from ankimorphs.ankimorphs_config import RawConfigFilterKeys, RawConfigKeys
 def test_am_config_contains_keys() -> None:
     # This function loads the dict from 'config.json' and
     # removes all the attributes found in 'am_config' and checks
-    # if there is anything was missed
+    # if anything was missed
 
     default_config_dict: dict[str, Any]
 

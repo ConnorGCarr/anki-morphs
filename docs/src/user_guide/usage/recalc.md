@@ -25,110 +25,63 @@ running it automatically before Anki syncs your collection.
 > The [Anki FAQ](https://faqs.ankiweb.net/can-i-sync-only-some-of-my-decks.html) has some
 > tricks you can try if this poses a significant problem.
 
-## Scoring Algorithm (todo: remove)
 
-Low scores are good, high scores are bad; the more comprehensible and important a text is evaluated to be, the lower the
-score will end up being.
+## Scoring Algorithm
 
-The algorithm is as follows:
+> **TL;DR**: Low scores are good, high scores are bad.
 
-$$$ \large \text{Score} = U_n \times U_p + \sum_{m \in M}{m_p} $$$
+The order in which new cards are displayed depends on their `due` value: a card with `due = 1` will be shown before a card with `due = 2`,
+and so on. Leveraging this property, we can implement the following strategy: assign higher `due` values to cards with more complex
+text, pushing them further back in the card queue. Here are some examples of what that might look like:
+- "She walked home"
+    - `due = 600`
+- "Asymmetric catalysis for the enantioselective synthesis of chiral molecules"
+    - `due = 100 000 000`
 
-where
-$$$
-\begin{align*}
-& U_n = \text{The number of unknown morphs} \\
-& U_p = \text{Unknown morph penalty} = 5 \times 10^5\\
-& M = \text{The set of morphs}\\
-& m_p = \text{The priority given to morph } m\\
-\end{align*}
-$$$
+Now, let's define some properties that we want our cards to have:
+- Few unknowns morphs (comprehensibility)
+- High priority morphs (significance)
+- Ideal length (low deviation)
 
-Note that the sum of [morph priorities](../setup/prioritizing.md) is capped to be less than the unknown morph penalty,
-which gives us the inequality:
-
-$$$ \large 0 \le \left(\sum_{m \in M}{m_p}\right) < U_p $$$
-
-This makes sure that one unknown morph is calculated to be more difficult than any number of known rare morphs.
-
-## (new) Scoring Algorithm (very rough draft)
-
+We can now invert these properties to calculate a "penalty" score, which will then replace the `due` values of the cards.
+That formula at the highest level is:
 
 $$$
-\large \text{score} = \min \left(PU \times \left| M_{\text{U}} \right| + \text{tuning},\  \text{score}_{\text{max}} \right)
+\large \text{score} = \text{incomprehensibility} + \text{insignificance} + \text{deviation}
+$$$
+
+Let’s break it down into smaller components.
+
+### incomprehensibility
+
+In practice, the comprehensibility of a given text is determined by a combination of known grammar points and vocabulary.
+However, evaluating grammar is non-trivial, especially in a general language learning context, so we will not make any explicit
+attempts to do so.
+
+Determining which morphs are known is relatively easy, so our incomprehensibility score will be the product of the
+number of unknown morphs and a constant penalty factor.
+
+$$$
+\large \text{incomprehensibility} = PU \times \left| M_{\text{U}} \right|
 $$$
 
 where
 $$$
 {\large
 \begin{align*}
-& \min: \text{choose the side with the lowest value} \\
 & PU: \text{penalty for unknown} = 10^6\\
 & M: \text{set of identified morphs} \\
 & m_{\text{li}}: \text{morph learning interval} \\
 & M_U: \text{unknown morphs} = \{ m \in M \mid m_{\text{li}} = 0 \} \\
-& \text{tuning}: \text{scalar product of priorities and their weights}\\
-& \text{score}_{\text{max}}: \text{signed 32-bit int max and some leeway} = 2^{31} - 1 - 10^8\\
 \end{align*}
 }
 $$$
 
 
-## Tuning
+### insignificance
 
-$$$
-\large \text{tuning} = \min \left(W \cdot P,\  PU - 1\right)
-$$$
-
-$$$
-W \cdot P = w_1 p_1 + w_2 p_2 + \cdots + w_n p_n = \sum_{i=1}^{n} w_i p_i
-$$$
-
-Let $$\mathbf{W}$$ be the column vector of weights and $$\mathbf{P}$$ be the column vector of priority terms:
-
-<br>
-
-$$$
-{\large
-\mathbf{W} = \begin{pmatrix}
-\begin{array}{l}
-W_{\text{total}}^{\text{all}} \\[10pt]
-W_{\text{total}}^{\text{unknown}} \\[10pt]
-W_{\text{total}}^{\text{learning}} \\[10pt]
-W_{\text{average}}^{\text{all}} \\[10pt]
-W_{\text{average}}^{\text{learning}} \\[10pt]
-W_{\text{target}}^{\text{all}} \\[10pt]
-W_{\text{target}}^{\text{learning}} \\[10pt]
-\end{array}
-\end{pmatrix}
-\quad
-\mathbf{P} = \begin{pmatrix}
-\begin{array}{l}
-P_{\text{total}}^{\text{all}} \\[10pt]
-P_{\text{total}}^{\text{unknown}} \\[10pt]
-P_{\text{total}}^{\text{learning}} \\[10pt]
-P_{\text{average}}^{\text{all}} \\[10pt]
-P_{\text{average}}^{\text{learning}} \\[10pt]
-D_{\text{target}}^{\text{all}} \\[10pt]
-D_{\text{target}}^{\text{learning}} \\[10pt]
-\end{array}
-\end{pmatrix}
-}
-$$$
-
-### Priorities
-
-$$$
-{\large
-\begin{align*}
-& P = \text{priority}  \\
-& W = \text{weight} \\
-& m_{\text{p}}: \text{morph priority} \\
-& M_{\text{L}} = \{ m \in M \mid 0 < m_{\text{li}} < \text{known threshold} \} \\
-\end{align*}
-}
-$$$
-
+[Each morph has a priority value](../setup/prioritizing.md), which AnkiMorphs aggregates into the following
+metrics:
 $$$
 {\Large
 \begin{array}{ccc}
@@ -150,10 +103,114 @@ P_{\text{average}}^{\text{learning}} &= \frac{P_{\text{total}}^{\text{learning}}
 }
 $$$
 
-> **Note**: $$\large P_{\text{average}}^{\text{unknown}}$$ is not included since cards with multiple unknown morphs shouldn't
-> studied, and it would therefore not be very meaningful.
+where
+$$$
+{\large
+\begin{align*}
+& m_{\text{p}}: \text{morph priority} \\
+& M_{\text{L}}: \text{learning morphs} = \{ m \in M \mid 0 < m_{\text{li}} < \text{known threshold} \} \\
+\end{align*}
+}
+$$$
 
-### Target number of morphs
+<br>
+
+> **Note**: $$\large P_{\text{average}}^{\text{unknown}}$$ is not included since it would not have any meaningful impact
+> on 1T cards.
+
+You can customize the algorithm by selecting any combination of these metrics and adjusting their influence on the
+result by changing their corresponding weights. This is done using two column vectors: one for the weights and one for the
+aggregated metrics. The final score is computed by taking the scalar product of these vectors:
+
+<br>
+
+$$$
+{\large
+\mathbf{W_P} = \begin{pmatrix}
+\begin{array}{l}
+W_{\text{total}}^{\text{all}} \\[10pt]
+W_{\text{total}}^{\text{unknown}} \\[10pt]
+W_{\text{total}}^{\text{learning}} \\[10pt]
+W_{\text{average}}^{\text{all}} \\[10pt]
+W_{\text{average}}^{\text{learning}} \\[10pt]
+\end{array}
+\end{pmatrix}
+\quad
+\mathbf{P} = \begin{pmatrix}
+\begin{array}{l}
+P_{\text{total}}^{\text{all}} \\[10pt]
+P_{\text{total}}^{\text{unknown}} \\[10pt]
+P_{\text{total}}^{\text{learning}} \\[10pt]
+P_{\text{average}}^{\text{all}} \\[10pt]
+P_{\text{average}}^{\text{learning}} \\[10pt]
+\end{array}
+\end{pmatrix}
+}
+$$$
+
+which gives us:
+$$$
+\large \text{insignificance} = W_P \cdot P = w_1 p_1 + w_2 p_2 + \cdots + w_n p_n = \sum_{i=1}^{n} w_i p_i
+$$$
+
+>**Example**:
+>
+>$$$
+{\large
+\mathbf{W_P} = \begin{pmatrix}
+\begin{array}{c}
+10 \\[10pt]
+0 \\[10pt]
+0 \\[10pt]
+0 \\[10pt]
+5 \\[10pt]
+\end{array}
+\end{pmatrix}
+\quad
+\mathbf{P} = \begin{pmatrix}
+\begin{array}{c}
+600 \\[10pt]
+30 \\[10pt]
+20 \\[10pt]
+100 \\[10pt]
+10 \\[10pt]
+\end{array}
+\end{pmatrix}
+}
+$$$
+<br>
+$$$
+\large W_P \cdot P = 10 \times 600 + 0 \times 30 + 0 \times 20 + 0 \times 100 + 5 \times 10 = 6050
+$$$
+
+### Deviation
+
+Learning can be easier with more surrounding context, e.g., other known words. However, if a sentence contains too many
+words, learning may become more challenging. This is because the complexity of the grammar often increases, along with
+the likelihood of not perfectly remembering all the surrounding words. Ideally, we want our cards to have sentences
+within this optimal range.
+
+Having the ability to bias our sentences towards a certain length is also beneficial; you might find it easier to learn
+from shorter sentences compared to longer ones, or vice versa.
+
+To achieve this, we use a piecewise equation that where we define the following:
+
+- How much to penalize excessive morphs
+- How much to penalize insufficient morphs
+- The ideal range (target) of morphs
+
+Here is an example of what that might look like:
+![all_taget_diff.png](../../img/all_taget_diff.png)
+
+>**Playground**: [https://www.geogebra.org/graphing/ta3eqb8y](https://www.geogebra.org/graphing/ta3eqb8y)
+
+This graph shows:
+- Penalty for excessive morphs: squared in relation to the target difference
+- Penalty for insufficient morphs: linear in relation to the target difference
+- Ideal range (target): 4-6 morphs
+
+AnkiMorphs provides the following metrics, whose variables you can adjust, and you can disable or amply them by changing
+their weights:
 
 <br>
 
@@ -197,11 +254,73 @@ $$$
 }
 $$$
 
-playground: [https://www.geogebra.org/graphing/ta3eqb8y](https://www.geogebra.org/graphing/ta3eqb8y)
+with the following vectors:
 
+$$$
+{\large
+\mathbf{W_D} = \begin{pmatrix}
+\begin{array}{l}
+W_{\text{target}}^{\text{all}} \\[10pt]
+W_{\text{target}}^{\text{learning}} \\[10pt]
+\end{array}
+\end{pmatrix}
+\quad
+\mathbf{D} = \begin{pmatrix}
+\begin{array}{l}
+D_{\text{target}}^{\text{all}} \\[10pt]
+D_{\text{target}}^{\text{learning}} \\[10pt]
+\end{array}
+\end{pmatrix}
+}
+$$$
 
-learning target:
-![learning_target_diff.png](../../img/learning_target_diff.png)
+which gives us:
+$$$
+\large \text{deviation} = W_D \cdot D = \sum_{i=1}^{n} w_i d_i
+$$$
 
-all target:
-![all_taget_diff.png](../../img/all_taget_diff.png)
+### Constraints
+
+We have now refined the formula to:
+
+$$$
+{\large
+\begin{align*}
+\text{score} &= \text{incomprehensibility} + \text{insignificance} + \text{deviation}\\
+\text{score} &= PU \times \left| M_{\text{U}} \right| + W_P \cdot P + W_D \cdot D
+\end{align*}
+}
+$$$
+
+However, there are a few practical concerns we have to address.
+
+First, we need to ensure that cards are primarily ordered by the number of unknown morphs they contain. This means that
+all 1T cards should appear before any MT cards, regardless of their insignificance or deviation.
+
+To do this, we apply a `min` function to ensure that the sum of the last two terms does not exceed $$PU - 1$$
+$$$
+\large \text{score} = PU \times \left| M_{\text{U}} \right| + \min \left(W_P \cdot P + W_D \cdot D,\  PU - 1\right)
+$$$
+
+where
+$$$
+{\large
+\begin{align*}
+& \min: \text{choose the side that has the smallest number} \\
+\end{align*}
+}
+$$$
+
+Lastly, we have to make sure that the score does not exceed the maximum card `due` value allowed by Anki. The `due` value
+is stored as a signed 32-bit integer, with a maximum value of $$2^{31} - 1$$. To prevent overflow when cards are shifted,
+we include a safety margin of $$10^8$$. This results in the upper bound:
+
+$$$
+\large \text{score}_{\text{max}} = 2^{31} - 1 - 10^8
+$$$
+
+Now we wrap the entire expression in another `min` function to get our final formula:
+
+$$$
+\large \text{score} = \min \left(PU \times \left| M_{\text{U}} \right| + \min \left(W_P \cdot P + W_D \cdot D,\  PU - 1\right),\  \text{score}_{\text{max}} \right)
+$$$
