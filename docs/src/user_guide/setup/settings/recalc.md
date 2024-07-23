@@ -87,23 +87,5 @@
 * **Learning interval of known morphs**:  
   This is variable is used when text is [highlighted](../../setup/settings/extra-fields.md#using-am-highlighted), and it
   can determine [U and A numbers](../../installation/changes-to-anki.md#toolbar).
-* **U and A shows seen morphs**:  
-  [U and A](../../installation/changes-to-anki.md#toolbar) shows all morphs that have been reviewed at least once. This
-  can be more motivating than
-  only seeing known morphs since it goes up every time you study new cards, but it can also give you a false sense of
-  confidence.
-* **U and A shows known morphs**:  
-  [U and A](../../installation/changes-to-anki.md#toolbar) only show known morphs (uses
-  the `Learning interval of known morphs` setting above).
-* **am-unknowns field shows morph inflections**:  
-  The [Extra Field](../../setup/settings/extra-fields.md#using-am-unknowns) `am-unknowns` shows morphs in their
-  inflected forms.
-   ``` text
-  "walking and talking" -> [walking, and, talking]
-   ```
-* **am-unknowns field shows morph lemmas**:  
-  The [Extra Field](../../setup/settings/extra-fields.md#using-am-unknowns) `am-unknowns` shows morphs in their lemma (
-  base) forms.
-  ``` text
-  "walking and talking" -> [walk, and, talk]
-  ```
+
+

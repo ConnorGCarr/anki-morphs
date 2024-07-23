@@ -2,6 +2,19 @@
 
 ![extra-fields.png](../../../img/extra-fields.png)
 
+* **am-unknowns field shows morph inflections**:  
+  The [Extra Field](../../setup/settings/extra-fields.md#using-am-unknowns) `am-unknowns` shows morphs in their
+  inflected forms.
+   ``` text
+  "walking and talking" -> [walking, and, talking]
+   ```
+* **am-unknowns field shows morph lemmas**:  
+  The [Extra Field](../../setup/settings/extra-fields.md#using-am-unknowns) `am-unknowns` shows morphs in their lemma (
+  base) forms.
+  ``` text
+  "walking and talking" -> [walk, and, talk]
+  ```
+
 The text found in the [note filter: field](../settings/note-filter.md#field) is extracted and analyzed by AnkiMorphs.
 AnkiMorphs can then place
 information about that text into dedicated fields on your cards.
