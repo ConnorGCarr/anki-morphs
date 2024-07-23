@@ -16,75 +16,10 @@ MORPH_UNKNOWN_PENALTY: int = 1_000_000
 ####################################################################################
 #                                      ALGORITHM
 ####################################################################################
-# The algorithm is calculated with the following equation
-#
-#     score = (
-#             unknown_morphs_total_priority_score
-#             + all_morphs_avg_priority_score
-#             + all_morphs_total_priority_score
-#             + leaning_morphs_target_difference_score
-#             + all_morphs_target_difference_score
-#     )
-#
-# Each of the terms has an associated weight that can be used to bias
-# the term arbitrarily, e.g.:
-#
-#     unknown_morphs_total_priority_score = (
-#             TOTAL_PRIORITY_UNKNOWN_MORPHS_WEIGHT * total_priority_unknown_morphs
-#     )
-#
-# A lower total score means that the card will show up sooner
-# in the new card list, so each of the factors can be thought
-# of as a penalty.
-#
-# Priority is measured by frequency of the morph. An unknown morph
-# that has a higher frequency will have a lower priority score
-#
-# TERMS IN THE ALGORITHM:
-#
-# - unknown_morphs_total_priority_score:
-#   The sum of the priority scores for all the unknown morphs.
-#   Note: We only implement a "total priority" version since cards should ideally
-#   only contain one unknown morph.
-#
-# - all_morphs_avg_priority_score:
-#   The average (mean) of the priority scores for all found morphs.
-#
-# - all_morphs_total_priority_score:
-#   The total priority scores for all found morphs
-#
-# - leaning_morphs_target_difference_score:
-#   The penalty given when the target number of learning morphs is not reached.
-#   This is used as a means of reinforcing new vocabulary.
-#   A piecewise quadratic equation is used for more flexibility, i.e. the punishment
-#   can be higher for overshooting the target vs undershooting, and vice-versa.
-#
-# - all_morphs_target_difference_score:
-#   Same as "leaning_morphs_target_difference_score", but for all morphs.
-#
-#######################################
-# todo: turn these into documentation/comments
-# # The following should be user selected
-# # Target length of sentences
-# TARGET_NUM_MORPHS_LOW = 4
-# TARGET_NUM_MORPHS_HIGH = 6
-#
-# TARGET_NUM_LEARNING_MORPHS_LOW = 1
-# TARGET_NUM_LEARNING_MORPHS_HIGH = 2
-#
-# # quadratic equation coefficients: ax^2 + bx + c
-# TARGET_NUM_MORPHS_HIGH_COEFFICIENTS = (1, 0, 0)
-# TARGET_NUM_MORPHS_LOW_COEFFICIENTS = (0, 1, 0)
-#
-# TARGET_NUM_LEARNING_HIGH_COEFFICIENTS = (1, 0, 0)
-# TARGET_NUM_LEARNING_LOW_COEFFICIENTS = (1, 0, 0)
-
-# # Weights for the different criteria
-# TOTAL_PRIORITY_UNKNOWN_MORPHS_WEIGHT = 10
-# AVG_PRIORITY_ALL_MORPHS_WEIGHT = 1
-# TOTAL_PRIORITY_ALL_MORPHS_WEIGHT = 0
-# LEARNING_MORPHS_TARGET_DISTANCE_WEIGHT = 5
-# ALL_MORPHS_TARGET_DISTANCE_WEIGHT = 1
+# an in-depth explanation of the algorithm can be found here:
+# - docs/src/user_guide/usage/recalc.md
+# which can also be viewed here:
+# - https://mortii.github.io/anki-morphs/user_guide/usage/recalc.html#scoring-algorithm
 #######################################
 
 
