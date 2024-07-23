@@ -17,7 +17,6 @@
     - [Extra Fields](user_guide/setup/settings/extra-fields.md)
     - [Tags](user_guide/setup/settings/tags.md)
     - [Preprocess](user_guide/setup/settings/preprocess.md)
-    - [Skip](user_guide/setup/settings/skip.md)
     - [Recalc](user_guide/setup/settings/recalc.md)
     - [Card Handling](user_guide/setup/settings/card_handling.md)
     - [Algorithm](user_guide/setup/settings/algorithm.md)
