@@ -1536,6 +1536,13 @@
               </widget>
              </item>
              <item>
+              <widget class="QLabel" name="label_34">
+               <property name="text">
+                <string>Open Progression</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="label_18">
                <property name="text">
                 <string>Known Morphs Exporter</string>
@@ -1563,6 +1570,9 @@
              </item>
              <item>
               <widget class="QKeySequenceEdit" name="shortcutGeneratorsKeySequenceEdit"/>
+             </item>
+             <item>
+              <widget class="QKeySequenceEdit" name="shortcutProgressionKeySequenceEdit"/>
              </item>
              <item>
               <widget class="QKeySequenceEdit" name="shortcutKnownMorphsExporterKeySequenceEdit"/>
@@ -1644,6 +1654,13 @@
                  <height>16777215</height>
                 </size>
                </property>
+               <property name="text">
+                <string>Disable</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="shortcutProgressionDisablePushButton">
                <property name="text">
                 <string>Disable</string>
                </property>

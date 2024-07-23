@@ -27,6 +27,7 @@ class ShortcutTab(SettingsTab):
             RawConfigKeys.SHORTCUT_LEARN_NOW: self.ui.shortcutLearnNowKeySequenceEdit,
             RawConfigKeys.SHORTCUT_VIEW_MORPHEMES: self.ui.shortcutViewMorphsKeySequenceEdit,
             RawConfigKeys.SHORTCUT_GENERATORS: self.ui.shortcutGeneratorsKeySequenceEdit,
+            RawConfigKeys.SHORTCUT_PROGRESSION: self.ui.shortcutProgressionKeySequenceEdit,
             RawConfigKeys.SHORTCUT_KNOWN_MORPHS_EXPORTER: self.ui.shortcutKnownMorphsExporterKeySequenceEdit,
         }
 
@@ -42,6 +43,7 @@ class ShortcutTab(SettingsTab):
         self.ui.shortcutLearnNowDisablePushButton.setAutoDefault(False)
         self.ui.shortcutViewMorphsDisablePushButton.setAutoDefault(False)
         self.ui.shortcutGeneratorsDisablePushButton.setAutoDefault(False)
+        self.ui.shortcutProgressionDisablePushButton.setAutoDefault(False)
         self.ui.shortcutKnownMorphsExporterDisablePushButton.setAutoDefault(False)
         self.ui.shortcutBrowseReadyDisablePushButton.setAutoDefault(False)
         self.ui.shortcutBrowseAllDisablePushButton.setAutoDefault(False)
@@ -66,6 +68,9 @@ class ShortcutTab(SettingsTab):
         )
         self.ui.shortcutGeneratorsDisablePushButton.clicked.connect(
             self.ui.shortcutGeneratorsKeySequenceEdit.clear
+        )
+        self.ui.shortcutProgressionDisablePushButton.clicked.connect(
+            self.ui.shortcutProgressionKeySequenceEdit.clear
         )
         self.ui.shortcutKnownMorphsExporterDisablePushButton.clicked.connect(
             self.ui.shortcutKnownMorphsExporterKeySequenceEdit.clear
