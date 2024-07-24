@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>923</width>
-    <height>478</height>
+    <width>918</width>
+    <height>486</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -21,10 +21,22 @@
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QTabWidget" name="tabWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="general_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>General</string>
         </attribute>
@@ -195,6 +207,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_25">
+           <property name="topMargin">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QPushButton" name="restoreGeneralPushButton">
              <property name="text">
@@ -220,6 +235,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="note_filters_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Note Filters</string>
         </attribute>
@@ -324,6 +345,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="extra_fields_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Extra Fields</string>
         </attribute>
@@ -403,6 +430,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <property name="topMargin">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QPushButton" name="restoreExtraFieldsPushButton">
              <property name="text">
@@ -428,6 +458,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="tags_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Tags</string>
         </attribute>
@@ -534,6 +570,9 @@
            </item>
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_7">
+             <property name="topMargin">
+              <number>10</number>
+             </property>
              <item>
               <widget class="QPushButton" name="restoreTagsPushButton">
                <property name="text">
@@ -561,6 +600,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="preprocess_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Preprocess</string>
         </attribute>
@@ -626,6 +671,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_8">
+           <property name="topMargin">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QPushButton" name="restorePreprocessPushButton">
              <property name="text">
@@ -651,6 +699,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="card_handling_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Card Handling</string>
         </attribute>
@@ -792,6 +846,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <property name="topMargin">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QPushButton" name="restoreCardHandlingPushButton">
              <property name="text">
@@ -817,6 +874,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="algorithm_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Algorithm</string>
         </attribute>
@@ -1343,6 +1406,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_17">
+           <property name="topMargin">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QPushButton" name="restoreAlgorithmPushButton">
              <property name="text">
@@ -1368,6 +1434,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="toolbar_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Toolbar</string>
         </attribute>
@@ -1460,6 +1532,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_27">
+           <property name="topMargin">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QPushButton" name="restoreToolbarPushButton">
              <property name="text">
@@ -1485,6 +1560,12 @@
         </layout>
        </widget>
        <widget class="QWidget" name="shortcuts_tab">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <attribute name="title">
          <string>Shortcuts</string>
         </attribute>
@@ -1809,6 +1890,9 @@
          </item>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_10">
+           <property name="topMargin">
+            <number>10</number>
+           </property>
            <item>
             <widget class="QPushButton" name="restoreShortcutsPushButton">
              <property name="text">

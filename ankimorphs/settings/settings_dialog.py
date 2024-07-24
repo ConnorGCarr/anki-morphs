@@ -5,7 +5,7 @@ from typing import Any, Callable
 
 import aqt
 from aqt import mw
-from aqt.qt import QDialog, QWidget  # pylint:disable=no-name-in-module
+from aqt.qt import QDialog, QSizePolicy, QWidget  # pylint:disable=no-name-in-module
 from aqt.utils import tooltip
 
 from .. import ankimorphs_config, ankimorphs_globals, message_box_utils
@@ -117,6 +117,12 @@ class SettingsDialog(QDialog):  # pylint:disable=too-many-instance-attributes
             f"AnkiMorphs version: {ankimorphs_globals.__version__}"
         )
 
+        # change the minimum size of the window depending on the current tab layout
+        self.ui.tabWidget.currentChanged.connect(self._update_size_policies)
+
+        # apply the size policy to the initial tab
+        self._update_size_policies(index=0)
+
         self.show()
 
     def _restore_all_defaults(self) -> None:
@@ -185,6 +191,29 @@ class SettingsDialog(QDialog):  # pylint:disable=too-many-instance-attributes
         for _tab in self._all_tabs:
             _tab.restore_to_config_state()
         self.close()
+
+    def _update_size_policies(self, index: int) -> None:
+        tab_widget = self.ui.tabWidget
+
+        # Set size policy to Ignored for all tabs except the selected one
+        for i in range(tab_widget.count()):
+            widget = tab_widget.widget(i)
+            assert widget is not None
+
+            if i != index:
+                widget.setSizePolicy(
+                    QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Ignored
+                )
+
+        # Set size policy to Preferred for the selected tab and adjust its size
+        selected_widget = tab_widget.widget(index)
+        assert selected_widget is not None
+
+        selected_widget.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred
+        )
+        selected_widget.resize(selected_widget.minimumSizeHint())
+        selected_widget.adjustSize()
 
     def closeEvent(self, event: Any) -> None:  # pylint:disable=invalid-name
         # overriding the QDialog close event function
